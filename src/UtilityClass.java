@@ -1,9 +1,9 @@
 class UtilityClass {
 
-    public static String tag = "[ATC] ";
+    public static final String TAG = "[ATC] ";
 
     public static void log(String s) {
-       System.out.println(tag + s);
+       System.out.println(TAG + s);
     }
     
     public static void checkOS() {

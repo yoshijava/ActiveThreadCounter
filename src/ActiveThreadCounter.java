@@ -46,15 +46,12 @@ class ActiveThreadCounter {
         UtilityClass.checkOS();
         if(args.length != 1) {
             log("No PID is given. Use /proc/myself/ instead.");
-            FileReader fileReader = new FileReader("/proc/self/status");
+            FileReader fileReader = new FileReader("/proc/self/stat");
             BufferedReader bReader = new BufferedReader(fileReader);
             String line = "";
-            // do you know why it is 5? Magic.
-            for(int i=0; i<5; i++) {
-                line = bReader.readLine();
-            }
-            String[] words = line.split(":");
-            pid = Long.parseLong(words[1].trim());
+            line = bReader.readLine();
+            String[] words = line.split(" ");
+            pid = Long.parseLong(words[0].trim());
             log("pid of /proc/myself = " + pid);
         }
         else {
