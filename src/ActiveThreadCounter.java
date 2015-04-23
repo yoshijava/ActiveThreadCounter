@@ -9,10 +9,8 @@ class ActiveThreadCounter {
     private File myTask;
     private Vector<LinuxTask> subtask = new Vector<LinuxTask>();
 
-    private static String tag = "[ATC] ";
-
     private static void log(String s) {
-       System.out.println(tag + s);
+        UtilityClass.log(s);
     }
 
     public ActiveThreadCounter(long pid) {
@@ -42,18 +40,10 @@ class ActiveThreadCounter {
         }
     }
 
-    private static void checkOS() {
-        String OS = System.getProperty("os.name");
-        if( OS.equalsIgnoreCase("linux") == false ) {
-            log("Only linux OSs are supported");
-            System.exit(1);
-        }
-    }
-
     public static void main(String[] args) throws IOException {
         long pid = -1;
         // If OS is not linux, just quit.
-        checkOS();
+        UtilityClass.checkOS();
         if(args.length != 1) {
             log("No PID is given. Use /proc/myself/ instead.");
             FileReader fileReader = new FileReader("/proc/self/status");
