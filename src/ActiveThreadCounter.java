@@ -10,6 +10,10 @@ class ActiveThreadCounter {
     private File myTask;
     private Vector<LinuxTask> friendGroup = new Vector<LinuxTask>();
 
+    private static void logd(String s) {
+        UtilityClass.logd(s);
+    }
+
     private static void log(String s) {
         UtilityClass.log(s);
     }
@@ -22,13 +26,13 @@ class ActiveThreadCounter {
 
     private void checkPID() {
         myself = new File("/proc/" + pid + "/");
-        log("Checking whether " + pid + " exists...");
+        logd("Checking whether " + pid + " exists...");
         if (myself.exists() && myself.isDirectory()) {
-            log("The proc of pid = " + pid + " exists! Good job.");
+            logd("The proc of pid = " + pid + " exists! Good job.");
             myTask = new File("/proc/" + pid + "/task/");
         }
         else {
-            log("Are you nuts?");
+            logd("Are you nuts?");
             System.exit(1);
         }
 
@@ -47,7 +51,7 @@ class ActiveThreadCounter {
                 friendGroup.add(task);
             }
             catch(IOException e) {
-                log("So fast. The new born friend is gone...");
+                logd("So fast. The new born friend is gone...");
             }
         }
         return 0;
@@ -68,7 +72,7 @@ class ActiveThreadCounter {
                 friend.updateState();
             }
             catch(IOException e) {
-                log("An old friend is gone. RIP. He is no longer in my friend list anymore.");
+                logd("An old friend is gone. RIP. He is no longer in my friend list anymore.");
                 iter.remove();
             }
         }

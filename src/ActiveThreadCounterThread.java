@@ -15,7 +15,7 @@ class ActiveThreadCounterThread extends Thread {
     }   
 
     public void run() {
-        log("I'm going to fucking monitoring the threads' states...");
+        logd("I'm going to fucking monitoring the threads' states...");
         int counter = ConfigurableConstants.TIME_TO_REBUILD_FRIEND_LIST;
         int accumulatedR_state = 0;
         int round = 0;
@@ -28,7 +28,7 @@ class ActiveThreadCounterThread extends Thread {
 
             counter--;
             if (counter == 0 ) {
-                log("time to remake friends!");
+                logd("time to remake friends!");
                 int ret = monitoredThread.rebuildFriendsList();
                 if (ret == -1) {
                     // this thread is TERMINATED.
@@ -51,17 +51,22 @@ class ActiveThreadCounterThread extends Thread {
             Thread.sleep(ConfigurableConstants.STATE_REFRESH_RATE);
         }
         catch(InterruptedException e) {
-            log("Fucking sleeping fails. How come?");
+            logd("Fucking sleeping fails. How come?");
             e.printStackTrace();
         }        
     }
 
+    // not used currently, but keep it for the future, maybe someone wants to stop the monitor in the future?
     public void stopMonitoring() {
         done = true;
     }
 
     private static void log(String s) {
         UtilityClass.log(s);
+    }
+
+    private static void logd(String s) {
+        UtilityClass.logd(s);
     }
 
     public static void main(String[] args) throws IOException {
@@ -80,7 +85,7 @@ class ActiveThreadCounterThread extends Thread {
         }
         ActiveThreadCounterThread obj = new ActiveThreadCounterThread(pid);
         obj.start();
-        log("Buckle up!");
+        logd("Buckle up!");
     }
 
 }
