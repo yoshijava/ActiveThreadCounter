@@ -22,30 +22,12 @@ class LinuxTask {
     // W  Waking (Linux 2.6.33 to 3.13 only)
     // P  Parked (Linux 3.9 to 3.13 only)
 
-    private String justGetFirstLine(String filename) {
-        String line = "";
-        try {
-            FileReader fileReader = new FileReader( filename );
-            BufferedReader bReader = new BufferedReader(fileReader);
-            line = bReader.readLine();
-            bReader.close();
-            fileReader.close();
-        }
-        catch(IOException e) {
-            // e.printStackTrace();
-            // Quiet please.
-        }
-        finally {
-            return line;
-        }
-    }
-
     public LinuxTask(File file) {
         // prefix should be something like /proc/[pid1]/task/[pid2]/
         String prefix = file.toString();
         
         // cmdline
-        cmdline = justGetFirstLine( prefix + "/" + cmdline );
+        cmdline = UtilityClass.justGetFirstLine( prefix + "/" + cmdline );
         if (cmdline == null) {
             // File not found
             // this thread may be destroyed immediately
@@ -58,7 +40,7 @@ class LinuxTask {
         pid = Long.parseLong(words[words.length-1]);
         
         // state
-        String line = justGetFirstLine( prefix + "/stat" );
+        String line = UtilityClass.justGetFirstLine( prefix + "/stat" );
         words = line.split(" ");
         String strState = words[2];
         if (strState.equals("R")) {
