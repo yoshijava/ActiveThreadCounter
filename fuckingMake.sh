@@ -1,2 +1,2 @@
 rm out/*
-javac -d out src/ActiveThreadCounter.java
+javac -d out src/*.java
