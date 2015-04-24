@@ -79,10 +79,7 @@ class ActiveThreadCounter {
     public int getRunningState() {
         int runningTask = 0;
 
-        Iterator<LinuxTask> iter = friendGroup.iterator();
-        while (iter.hasNext()) {
-            LinuxTask task = iter.next();
-
+        for( LinuxTask task : friendGroup ) {
             // current state
             int state = task.getCurrentState();
             runningTask += state;  // if not running/runnable, state = 0
