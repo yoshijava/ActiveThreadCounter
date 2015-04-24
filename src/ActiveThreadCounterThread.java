@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 class ActiveThreadCounterThread extends Thread {
     
     private long pid;
@@ -54,7 +56,7 @@ class ActiveThreadCounterThread extends Thread {
         UtilityClass.log(s);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         long pid = -1;
         // If OS is not linux, just quit.
         UtilityClass.checkOS();

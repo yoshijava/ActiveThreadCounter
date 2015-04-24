@@ -29,31 +29,27 @@ class LinuxTask {
     // W  Waking (Linux 2.6.33 to 3.13 only)
     // P  Parked (Linux 3.9 to 3.13 only)
 
-    public LinuxTask(File file) {
+    public LinuxTask(File file) throws IOException {
         prefix = file.toString();
         
         // cmdline
         cmdline = UtilityClass.justGetFirstLine( prefix + "/cmdline" );
-        if (cmdline == null) {
-            // File not found. Is it possible?
-            // keep all things default
-            UtilityClass.log(prefix + "/cmdline is not found. Weird.");
-            return;
-        }
 
         // pid
         String[] words = prefix.split("/");
         pid = Long.parseLong(words[words.length-1]);
-        buildState();
+        updateState();
 
     }
 
-    private void buildState() {
+    public void updateState() throws IOException {
         // state
         String line = UtilityClass.justGetFirstLine( prefix + "/stat" );
-        String[] words = line.split(" ");
-        String strState = words[2];
-        if (strState.equals("R")) {
+
+        // get thread's state. this is a bit TRICKY. Refer to /proc/[pid]/stat
+        int statePosition = line.indexOf(")")+2;
+        char charState = line.charAt(statePosition);
+        if (charState == 'R') {
             // yes! this thread is runnable or running
             state = 1;
             hitRunningState++;
@@ -67,10 +63,6 @@ class LinuxTask {
 
     public long getPID() {
         return pid;
-    }
-
-    public void updateState() {
-        buildState();
     }
 
     public int getRunningStateNumber() {

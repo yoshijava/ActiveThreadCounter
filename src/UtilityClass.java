@@ -16,21 +16,13 @@ class UtilityClass {
         }
     }
 
-    public static String justGetFirstLine(String filename) {
-        String line = "";
-        try {
-            FileReader fileReader = new FileReader( filename );
-            BufferedReader bReader = new BufferedReader(fileReader);
-            line = bReader.readLine();
-            bReader.close();
-            fileReader.close();
-        }
-        catch(IOException e) {
-            // e.printStackTrace();
-            // Quiet please.
-        }
-        finally {
-            return line;
-        }
+    public static String justGetFirstLine(String filename) throws IOException {
+        String line = null;
+        FileReader fileReader = new FileReader( filename );
+        BufferedReader bReader = new BufferedReader(fileReader);
+        line = bReader.readLine();
+        bReader.close();
+        fileReader.close();
+        return line;
     }
 }

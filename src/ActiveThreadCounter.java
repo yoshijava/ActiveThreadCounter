@@ -1,14 +1,14 @@
 import java.io.*;
-import java.util.Vector;
-import java.util.Iterator;
+import java.util.*;
+
 
 class ActiveThreadCounter {
 
     private long pid;
-    private File[] friends;
+    private File[] friendsFile;
     private File myself;
     private File myTask;
-    private Vector<LinuxTask> subtask = new Vector<LinuxTask>();
+    private Vector<LinuxTask> friendGroup = new Vector<LinuxTask>();
 
     private static void log(String s) {
         UtilityClass.log(s);
@@ -35,24 +35,42 @@ class ActiveThreadCounter {
     }
     
     private void searchFriends() {
-        friends = myTask.listFiles();
-        for(int i=0; i < friends.length; i++) {
-            subtask.add(new LinuxTask(friends[i]));
+        friendsFile = myTask.listFiles();
+        for(int i=0; i < friendsFile.length; i++) {
+            try {
+                LinuxTask task = new LinuxTask(friendsFile[i]);
+                synchronized(friendGroup) {
+                    friendGroup.add(task);
+                }
+            }
+            catch(IOException e) {
+                log("So fast. The new born friend is gone...");
+            }
         }
     }
 
     // clean and rebuild the friend list
     public void rebuildFriendsList() {
-        subtask.clear();
+        synchronized(friendGroup) {
+            friendGroup.clear();
+        }
         searchFriends();
     }
 
     // notify friends to update their states
     public void notifyFriendsToUpdateState() {
-        Iterator<LinuxTask> iter = subtask.iterator();
+        Iterator<LinuxTask> iter = friendGroup.iterator();
         while (iter.hasNext()) {
-            LinuxTask task = iter.next();
-            task.updateState();
+            LinuxTask friend = iter.next();
+            try {
+                friend.updateState();
+            }
+            catch(IOException e) {
+                log("An old friend is gone. RIP. He is no longer in my friend list anymore.");
+                synchronized(friendGroup) {
+                    friendGroup.remove(friend);
+                }
+            }
         }
     }
 
@@ -61,15 +79,20 @@ class ActiveThreadCounter {
     public int getAvgRunningState() {
         int possibleRunningTask = 0;
 
-        Iterator<LinuxTask> iter = subtask.iterator();
-        while (iter.hasNext()) {
-            LinuxTask task = iter.next();
-            int probability = task.getRunningStateProbability();
-            log("task " + task.getPID() + "'s probability is " + probability);
-            if (probability >= ConfigurableConstants.THRESHOLD_AS_RUNNING_STATE) {
-                possibleRunningTask++;
+        Vector<Integer> probabilities = new Vector<Integer>();
+        synchronized(friendGroup) {
+            Iterator<LinuxTask> iter = friendGroup.iterator();
+            while (iter.hasNext()) {
+                LinuxTask task = iter.next();
+                int probability = task.getRunningStateProbability();
+                // log("task " + task.getPID() + "'s probability is " + probability);
+                probabilities.add(new Integer(probability));
+                if (probability >= ConfigurableConstants.THRESHOLD_AS_RUNNING_STATE) {
+                    possibleRunningTask++;
+                }
             }
         }
+        log(probabilities.toString());
         return possibleRunningTask;
     }
 
