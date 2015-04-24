@@ -17,6 +17,8 @@ class ActiveThreadCounterThread extends Thread {
     public void run() {
         log("I'm going to fucking monitoring the threads' states...");
         int counter = ConfigurableConstants.TIME_TO_REBUILD_FRIEND_LIST;
+        int accumulatedTLP = 0;
+        int round = 0;
 
         while(!done) {    
             // existing friends, please update your states
@@ -27,14 +29,20 @@ class ActiveThreadCounterThread extends Thread {
             counter--;
             if (counter == 0 ) {
                 log("time to remake friends!");
-                monitoredThread.rebuildFriendsList();
+                int ret = monitoredThread.rebuildFriendsList();
+                if (ret == -1) {
+                    // this thread is TERMINATED.
+                    done = true;
+                    continue;
+                }
                 counter = ConfigurableConstants.TIME_TO_REBUILD_FRIEND_LIST;
             }            
-            
+            round++;
             nap();
         }
 
-        log("You make me feel embarrassing...");
+        log("The monitored thread is terminated. So long!");
+        log("The final fucking avg. TLP = " + ((double) accumulatedTLP)/round);
     }
 
 

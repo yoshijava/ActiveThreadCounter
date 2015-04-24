@@ -34,27 +34,29 @@ class ActiveThreadCounter {
 
     }
     
-    private void searchFriends() {
+    // return 0 for good cases. -1 for bad case
+    private int searchFriends() {
         friendsFile = myTask.listFiles();
+        if(friendsFile == null) {
+            // this proc directory does not exist. It has been TERMINATED.
+            return -1;
+        }
         for(int i=0; i < friendsFile.length; i++) {
             try {
                 LinuxTask task = new LinuxTask(friendsFile[i]);
-                synchronized(friendGroup) {
-                    friendGroup.add(task);
-                }
+                friendGroup.add(task);
             }
             catch(IOException e) {
                 log("So fast. The new born friend is gone...");
             }
         }
+        return 0;
     }
 
     // clean and rebuild the friend list
-    public void rebuildFriendsList() {
-        synchronized(friendGroup) {
-            friendGroup.clear();
-        }
-        searchFriends();
+    public int rebuildFriendsList() {
+        friendGroup.clear();
+        return searchFriends();
     }
 
     // notify friends to update their states
@@ -67,9 +69,7 @@ class ActiveThreadCounter {
             }
             catch(IOException e) {
                 log("An old friend is gone. RIP. He is no longer in my friend list anymore.");
-                synchronized(friendGroup) {
-                    friendGroup.remove(friend);
-                }
+                iter.remove();
             }
         }
     }
@@ -80,16 +80,14 @@ class ActiveThreadCounter {
         int possibleRunningTask = 0;
 
         Vector<Integer> probabilities = new Vector<Integer>();
-        synchronized(friendGroup) {
-            Iterator<LinuxTask> iter = friendGroup.iterator();
-            while (iter.hasNext()) {
-                LinuxTask task = iter.next();
-                int probability = task.getRunningStateProbability();
-                // log("task " + task.getPID() + "'s probability is " + probability);
-                probabilities.add(new Integer(probability));
-                if (probability >= ConfigurableConstants.THRESHOLD_AS_RUNNING_STATE) {
-                    possibleRunningTask++;
-                }
+        Iterator<LinuxTask> iter = friendGroup.iterator();
+        while (iter.hasNext()) {
+            LinuxTask task = iter.next();
+            int probability = task.getRunningStateProbability();
+            // log("task " + task.getPID() + "'s probability is " + probability);
+            probabilities.add(new Integer(probability));
+            if (probability >= ConfigurableConstants.THRESHOLD_AS_RUNNING_STATE) {
+                possibleRunningTask++;
             }
         }
         log(probabilities.toString());
