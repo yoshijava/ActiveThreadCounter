@@ -1,19 +1,51 @@
 class ActiveThreadCounterThread extends Thread {
     
-    private int refreshRate = 100; // milliseconds
     private long pid;
     private ActiveThreadCounter monitoredThread;
     private boolean done = false;
 
+    // we should call it "threads that are in runnable/running state", but whatever...
+    private int TLP = 0;
+
     public ActiveThreadCounterThread(long pid) {
         this.pid = pid;
         monitoredThread = new ActiveThreadCounter(pid);
-    }
+    }   
 
     public void run() {
-        while(!done) {
+        log("I'm going to fucking monitoring the threads' states...");
 
+        while(!done) {
+            int counter = ConfigurableConstants.TIME_TO_REBUILD_FRIEND_LIST;
+
+            
+            // existing friends, please update your states
+            monitoredThread.notifyFriendsToUpdateState();
+            TLP = monitoredThread.getAvgRunningState();
+            log("The fucking TLP = " + TLP);
+
+            counter--;
+            if (counter == 0 ) {
+                // time to remake friends!
+                monitoredThread.rebuildFriendsList();
+                counter = 10;
+            }            
+            
+            nap();
         }
+
+        log("You make me feel embarrassing...");
+    }
+
+
+    private void nap() {
+        try {
+            Thread.sleep(ConfigurableConstants.STATE_REFRESH_RATE);
+        }
+        catch(InterruptedException e) {
+            log("Fucking sleeping fails. How come?");
+            e.printStackTrace();
+        }        
     }
 
     public void stopMonitoring() {

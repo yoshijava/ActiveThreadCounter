@@ -24,7 +24,7 @@ class ActiveThreadCounter {
         myself = new File("/proc/" + pid + "/");
         log("Checking whether " + pid + " exists...");
         if (myself.exists() && myself.isDirectory()) {
-            log("The proc of pid=" + pid + " exists! Good job.");
+            log("The proc of pid = " + pid + " exists! Good job.");
             myTask = new File("/proc/" + pid + "/task/");
         }
         else {
@@ -41,17 +41,36 @@ class ActiveThreadCounter {
         }
     }
 
-    public void rebuildFriends() {
+    // clean and rebuild the friend list
+    public void rebuildFriendsList() {
         subtask.clear();
         searchFriends();
     }
 
-    public void refreshFriends() {
+    // notify friends to update their states
+    public void notifyFriendsToUpdateState() {
         Iterator<LinuxTask> iter = subtask.iterator();
         while (iter.hasNext()) {
             LinuxTask task = iter.next();
-            task.rebuildState();
+            task.updateState();
         }
+    }
+
+    // this is the so-called TLP? Fuck.
+    // I just want to return the number of threads that are in running/runnable state in the previous sampling period
+    public int getAvgRunningState() {
+        int possibleRunningTask = 0;
+
+        Iterator<LinuxTask> iter = subtask.iterator();
+        while (iter.hasNext()) {
+            LinuxTask task = iter.next();
+            int probability = task.getRunningStateProbability();
+            log("task " + task.getPID() + "'s probability is " + probability);
+            if (probability >= ConfigurableConstants.THRESHOLD_AS_RUNNING_STATE) {
+                possibleRunningTask++;
+            }
+        }
+        return possibleRunningTask;
     }
 
     public static void main(String[] args) throws IOException {

@@ -65,13 +65,26 @@ class LinuxTask {
         }
     }
 
-    public void rebuildState() {
+    public long getPID() {
+        return pid;
+    }
+
+    public void updateState() {
         buildState();
     }
 
-    public int getRunningHitrate() {
-        int rate = (hitRunningState*100) / hitOtherState;
-        return rate;
+    public int getRunningStateNumber() {
+        return hitRunningState;
+    }
+
+    public int getOtherStateNumber() {
+        return hitOtherState;
+    }
+
+    // get the pro
+    public int getRunningStateProbability() {
+        int probability = (hitRunningState*100)/ (hitRunningState + hitOtherState);
+        return probability;
     }
 
 }

@@ -1,1 +1,1 @@
-java -cp out ActiveThreadCounter
+java -cp out ActiveThreadCounterThread
