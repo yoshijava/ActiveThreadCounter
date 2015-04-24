@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.Vector;
+import java.util.Iterator;
 
 class ActiveThreadCounter {
 
@@ -37,6 +38,19 @@ class ActiveThreadCounter {
         friends = myTask.listFiles();
         for(int i=0; i < friends.length; i++) {
             subtask.add(new LinuxTask(friends[i]));
+        }
+    }
+
+    public void rebuildFriends() {
+        subtask.clear();
+        searchFriends();
+    }
+
+    public void refreshFriends() {
+        Iterator<LinuxTask> iter = subtask.iterator();
+        while (iter.hasNext()) {
+            LinuxTask task = iter.next();
+            task.rebuildState();
         }
     }
 
