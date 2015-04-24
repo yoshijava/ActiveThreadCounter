@@ -76,22 +76,18 @@ class ActiveThreadCounter {
 
     // this is the so-called TLP? Fuck.
     // I just want to return the number of threads that are in running/runnable state in the previous sampling period
-    public int getAvgRunningState() {
-        int possibleRunningTask = 0;
+    public int getRunningState() {
+        int runningTask = 0;
 
-        Vector<Integer> probabilities = new Vector<Integer>();
         Iterator<LinuxTask> iter = friendGroup.iterator();
         while (iter.hasNext()) {
             LinuxTask task = iter.next();
-            int probability = task.getRunningStateProbability();
-            // log("task " + task.getPID() + "'s probability is " + probability);
-            probabilities.add(new Integer(probability));
-            if (probability >= ConfigurableConstants.THRESHOLD_AS_RUNNING_STATE) {
-                possibleRunningTask++;
-            }
+
+            // current state
+            int state = task.getCurrentState();
+            runningTask += state;  // if not running/runnable, state = 0
         }
-        log(probabilities.toString());
-        return possibleRunningTask;
+        return runningTask;
     }
 
     public static void main(String[] args) throws IOException {

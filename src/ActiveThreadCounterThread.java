@@ -6,8 +6,8 @@ class ActiveThreadCounterThread extends Thread {
     private ActiveThreadCounter monitoredThread;
     private boolean done = false;
 
-    // we should call it "threads that are in runnable/running state", but whatever...
-    private int TLP = 0;
+    // we should call it "threads that are in runnable/running state", but whatever...just don't call it "TLP"
+    private int R_state = 0;
 
     public ActiveThreadCounterThread(long pid) {
         this.pid = pid;
@@ -17,14 +17,14 @@ class ActiveThreadCounterThread extends Thread {
     public void run() {
         log("I'm going to fucking monitoring the threads' states...");
         int counter = ConfigurableConstants.TIME_TO_REBUILD_FRIEND_LIST;
-        int accumulatedTLP = 0;
+        int accumulatedR_state = 0;
         int round = 0;
 
         while(!done) {    
             // existing friends, please update your states
             monitoredThread.notifyFriendsToUpdateState();
-            TLP = monitoredThread.getAvgRunningState();
-            log("The fucking TLP = " + TLP);
+            R_state = monitoredThread.getRunningState();
+            log("The fucking 'R' state threads = " + R_state);
 
             counter--;
             if (counter == 0 ) {
@@ -42,7 +42,7 @@ class ActiveThreadCounterThread extends Thread {
         }
 
         log("The monitored thread is terminated. So long!");
-        log("The final fucking avg. TLP = " + ((double) accumulatedTLP)/round);
+        log("The final fucking avg. R_state = " + ((double) accumulatedR_state)/round);
     }
 
 

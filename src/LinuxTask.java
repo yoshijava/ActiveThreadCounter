@@ -7,11 +7,13 @@ class LinuxTask {
 
     // prefix should be something like /proc/[pid1]/task/[pid2]/
     private String prefix;  
+    private int[] histories = new int[ConfigurableConstants.HISTORY_SIZE];
+    private int historyIndex = 0;
 
     // 1 stands for running. Others are assigned as 0. -1 stands for un-initialized.
     private int state = -1; 
-    private int hitRunningState = 0;
-    private int hitOtherState = 0;
+    private long hitRunningState = 0;
+    private long hitOtherState = 0;
 
     // There are many possible states for a thread
     // I'd like to calculate how much time a thread spent in state "R" (running or runnable)
@@ -65,17 +67,16 @@ class LinuxTask {
         return pid;
     }
 
-    public int getRunningStateNumber() {
-        return hitRunningState;
+    public int getCurrentState() {
+        // before we return the current state, let's make a log into the history journal
+        histories[historyIndex] = getRunningStateProbability();
+        historyIndex = ( historyIndex + 1 ) % ConfigurableConstants.HISTORY_SIZE;
+
+        return state;
     }
 
-    public int getOtherStateNumber() {
-        return hitOtherState;
-    }
-
-    // get the pro
     public int getRunningStateProbability() {
-        int probability = (hitRunningState*100)/ (hitRunningState + hitOtherState);
+        int probability = (int) ( (hitRunningState*100) / (hitRunningState + hitOtherState) );
         return probability;
     }
 
