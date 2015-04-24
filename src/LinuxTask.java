@@ -27,11 +27,11 @@ class LinuxTask {
         String prefix = file.toString();
         
         // cmdline
-        cmdline = UtilityClass.justGetFirstLine( prefix + "/" + cmdline );
+        cmdline = UtilityClass.justGetFirstLine( prefix + "/cmdline" );
         if (cmdline == null) {
-            // File not found
-            // this thread may be destroyed immediately
+            // File not found. Is it possible?
             // keep all things default
+            UtilityClass.log(prefix + "/cmdline is not found. Weird.");
             return;
         }
 
