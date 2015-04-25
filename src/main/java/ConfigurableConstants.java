@@ -10,13 +10,15 @@ public class ConfigurableConstants {
     static {
         String content = "";
         try {
-            FileReader fileReader = new FileReader("./configs/Configuration.json");
-            BufferedReader buffReader = new BufferedReader(fileReader);
+            InputStream in = ConfigurableConstants.class.getResourceAsStream("Configuration.json");
+            BufferedReader buffReader = new BufferedReader(new InputStreamReader(in));
+
             String line = "";
             while ( (line = buffReader.readLine()) != null ) {
                 // i just like to add newline to make it beautiful when printing it out.
                 content += line + "\n"; 
             }
+
             JSONObject obj = new JSONObject(content);
             THRESHOLD_AS_RUNNING_STATE = Integer.parseInt(obj.getJSONObject("configuration").getString("THRESHOLD_AS_RUNNING_STATE"));
             TIME_TO_REBUILD_FRIEND_LIST = Integer.parseInt(obj.getJSONObject("configuration").getString("TIME_TO_REBUILD_FRIEND_LIST"));
