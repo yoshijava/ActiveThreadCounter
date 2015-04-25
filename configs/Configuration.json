@@ -1,0 +1,8 @@
+{
+   "configuration": {
+         "THRESHOLD_AS_RUNNING_STATE": "0",
+         "TIME_TO_REBUILD_FRIEND_LIST": "10",
+         "STATE_REFRESH_RATE": "100",
+         "HISTORY_SIZE": "20"
+    }
+}

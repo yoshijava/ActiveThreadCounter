@@ -5,4 +5,4 @@ else
 	echo clean build
 	mkdir out
 fi
-javac -d out src/*.java
+javac -cp libs/json-20141113.jar -d out src/*.java
