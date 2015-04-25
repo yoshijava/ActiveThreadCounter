@@ -1,6 +1,6 @@
 import java.io.IOException;
 
-class ActiveThreadCounterThread extends Thread {
+class ActiveThreadCounterMonitor extends Thread {
     
     private long pid;
     private ActiveThreadCounter monitoredThread;
@@ -9,7 +9,7 @@ class ActiveThreadCounterThread extends Thread {
     // we should call it "threads that are in runnable/running state", but whatever...just don't call it "TLP"
     private int R_state = 0;
 
-    public ActiveThreadCounterThread(long pid) {
+    public ActiveThreadCounterMonitor(long pid) {
         this.pid = pid;
         monitoredThread = new ActiveThreadCounter(pid);
     }   
@@ -83,7 +83,7 @@ class ActiveThreadCounterThread extends Thread {
         else {
             pid = Long.parseLong(args[0]);
         }
-        ActiveThreadCounterThread obj = new ActiveThreadCounterThread(pid);
+        ActiveThreadCounterMonitor obj = new ActiveThreadCounterMonitor(pid);
         obj.start();
         logd("Buckle up!");
     }
