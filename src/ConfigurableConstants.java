@@ -22,7 +22,7 @@ public class ConfigurableConstants {
             TIME_TO_REBUILD_FRIEND_LIST = Integer.parseInt(obj.getJSONObject("configuration").getString("TIME_TO_REBUILD_FRIEND_LIST"));
             STATE_REFRESH_RATE = Integer.parseInt(obj.getJSONObject("configuration").getString("STATE_REFRESH_RATE"));
             HISTORY_SIZE = Integer.parseInt(obj.getJSONObject("configuration").getString("HISTORY_SIZE"));
-
+            UtilityClass.logd("Successfully read the configuration file from a json file.");
         }
         catch (IOException e) {
             UtilityClass.logd("I cannot find the fucking configuration file. I'll use default values instead.");
