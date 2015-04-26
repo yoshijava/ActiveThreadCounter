@@ -1,1 +1,1 @@
-{"name":"Activethreadcounter","tagline":"Java","body":"# ActiveThreadCounter\r\nActive thread counter for linux process.\r\n","google":"","note":"Don't delete this file! It's used internally to help with page regeneration."}
+{"name":"ActiveThreadCounter","tagline":"Java","body":"# ActiveThreadCounter\r\nActive thread counter for linux process.\r\n\r\nSee the scripts for building and execution. Dependency of the required library is handled by Maven.\r\n","google":"","note":"Don't delete this file! It's used internally to help with page regeneration."}
