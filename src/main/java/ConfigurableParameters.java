@@ -1,7 +1,7 @@
 import org.json.*;
 import java.io.*;
 
-public class ConfigurableConstants {
+public class ConfigurableParameters {
     public static int THRESHOLD_AS_RUNNING_STATE; // probability * 100
     public static int TIME_TO_REBUILD_FRIEND_LIST; // i.e., Rebuild when time = (STATE_REFRESH_RATE * TIME_TO_REBUILD_FRIEND_LIST)
     public static int STATE_REFRESH_RATE; // milliseconds
@@ -10,7 +10,7 @@ public class ConfigurableConstants {
     static {
         String content = "";
         try {
-            InputStream in = ConfigurableConstants.class.getResourceAsStream("Configuration.json");
+            InputStream in = ConfigurableParameters.class.getResourceAsStream("Configuration.json");
             BufferedReader buffReader = new BufferedReader(new InputStreamReader(in));
 
             String line = "";

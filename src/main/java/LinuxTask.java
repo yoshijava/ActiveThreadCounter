@@ -7,7 +7,7 @@ class LinuxTask {
 
     // prefix should be something like /proc/[pid1]/task/[pid2]/
     private String prefix;  
-    private int[] histories = new int[ConfigurableConstants.HISTORY_SIZE];
+    private int[] histories = new int[ConfigurableParameters.HISTORY_SIZE];
     private int historyIndex = 0;
 
     // 1 stands for running. Others are assigned as 0. -1 stands for un-initialized.
@@ -70,7 +70,7 @@ class LinuxTask {
     public int getCurrentState() {
         // before we return the current state, let's make a log into the history journal
         histories[historyIndex] = getRunningStateProbability();
-        historyIndex = ( historyIndex + 1 ) % ConfigurableConstants.HISTORY_SIZE;
+        historyIndex = ( historyIndex + 1 ) % ConfigurableParameters.HISTORY_SIZE;
 
         return state;
     }

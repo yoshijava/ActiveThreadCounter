@@ -16,7 +16,7 @@ class ActiveThreadCounterMonitor extends Thread {
 
     public void run() {
         logd("I'm going to fucking monitoring the threads' states...");
-        int counter = ConfigurableConstants.TIME_TO_REBUILD_FRIEND_LIST;
+        int counter = ConfigurableParameters.TIME_TO_REBUILD_FRIEND_LIST;
         int accumulatedR_state = 0;
         int round = 0;
 
@@ -35,7 +35,7 @@ class ActiveThreadCounterMonitor extends Thread {
                     done = true;
                     continue;
                 }
-                counter = ConfigurableConstants.TIME_TO_REBUILD_FRIEND_LIST;
+                counter = ConfigurableParameters.TIME_TO_REBUILD_FRIEND_LIST;
             }            
             round++;
             nap();
@@ -48,7 +48,7 @@ class ActiveThreadCounterMonitor extends Thread {
 
     private void nap() {
         try {
-            Thread.sleep(ConfigurableConstants.STATE_REFRESH_RATE);
+            Thread.sleep(ConfigurableParameters.STATE_REFRESH_RATE);
         }
         catch(InterruptedException e) {
             logd("Fucking sleeping fails. How come?");
