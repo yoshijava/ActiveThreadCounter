@@ -27,7 +27,7 @@ public class ConfigurableParameters {
             UtilityClass.logd("Successfully read the configuration file from a json file.");
         }
         catch (IOException e) {
-            UtilityClass.logd("I cannot find the fucking configuration file. I'll use default values instead.");
+            UtilityClass.logd("I cannot find the configuration file. I'll use default values instead.");
             THRESHOLD_AS_RUNNING_STATE = 0;
             TIME_TO_REBUILD_FRIEND_LIST = 10;
             STATE_REFRESH_RATE = 100;

@@ -24,7 +24,7 @@ class ActiveThreadCounterMonitor extends Thread {
             // existing friends, please update your states
             monitoredThread.notifyFriendsToUpdateState();
             R_state = monitoredThread.getRunningState();
-            log("The fucking 'R' state threads = " + R_state);
+            log("The 'R' state threads = " + R_state);
 
             counter--;
             if (counter == 0 ) {
@@ -42,7 +42,7 @@ class ActiveThreadCounterMonitor extends Thread {
         }
 
         log("The monitored thread is terminated. So long!");
-        log("The final fucking avg. R_state = " + ((double) accumulatedR_state)/round);
+        log("The final avg. R_state = " + ((double) accumulatedR_state)/round);
     }
 
 
@@ -51,7 +51,7 @@ class ActiveThreadCounterMonitor extends Thread {
             Thread.sleep(ConfigurableParameters.STATE_REFRESH_RATE);
         }
         catch(InterruptedException e) {
-            logd("Fucking sleeping fails. How come?");
+            logd("Sleeping fails. How come?");
             e.printStackTrace();
         }        
     }
