@@ -15,7 +15,7 @@ class ActiveThreadCounterMonitor extends Thread {
     }   
 
     public void run() {
-        logd("I'm going to fucking monitoring the threads' states...");
+        logd("I'm going to monitor the threads' states...");
         int counter = ConfigurableParameters.TIME_TO_REBUILD_FRIEND_LIST;
         int accumulatedR_state = 0;
         int round = 0;
